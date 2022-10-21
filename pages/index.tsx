@@ -1,4 +1,3 @@
-// import type { NextPage } from 'next'
 import Head from 'next/head'
 import Header from "../components/Header";
 import Banner from "../components/Banner";
@@ -19,7 +18,6 @@ interface Props {
     horrorMovies: Movie[]
     romanceMovies: Movie[]
     documentaries: Movie[]
-    // products: Product[]
 }
 
 const Home = ({
@@ -34,12 +32,12 @@ const Home = ({
               }: Props) => {
 
     const {loading} = useAuth()
-    // const showModal = useRecoilValue(modalState)
+    const showModal = useRecoilValue(modalState)
 
     if (loading) return null
 
     return (
-        <div className="relative h-screen bg-gradient-to-b lg:h-[140vh]">
+        <div className={`relative h-screen bg-gradient-to-b lg:h-[140vh] ${showModal && "!h-screen overflow-hidden"}`}>
             <Head>
                 <title>Netflix - Home</title>
                 <link rel="icon" href="/favicon.ico"/>
@@ -59,7 +57,7 @@ const Home = ({
                     <Row title="Documentaries" movies={documentaries}/>
                 </section>
             </main>
-            {/*{showModal && <Modal/>}*/}
+            {showModal && <Modal/>}
         </div>
     )
 }
