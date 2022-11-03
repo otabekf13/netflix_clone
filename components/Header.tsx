@@ -2,6 +2,7 @@ import {BellIcon, MagnifyingGlassIcon, UserCircleIcon} from "@heroicons/react/20
 import Link from "next/link";
 import {useEffect, useState} from "react";
 import useAuth from "../hooks/useAuth";
+import BasicMenu from "./BasicMenu";
 
 function Header() {
     const [isScrolled, setIsScrolled] = useState(false)
@@ -30,6 +31,9 @@ function Header() {
                      className="cursor-pointer object-contain"
                      alt="netflix-logo"
                 />
+
+                <BasicMenu/>
+
                 <ul className="hidden space-x-4 md:flex">
                     <li className="headerLink">Home</li>
                     <li className="headerLink">TV Shows</li>
@@ -42,11 +46,9 @@ function Header() {
                 <MagnifyingGlassIcon className="hidden h-6 w-6 sm:inline"/>
                 <p className="hidden lg:inline">Kids</p>
                 <BellIcon className="h-6 w-6"/>
-                {/*<Link href="/account">>*/}
-                    <UserCircleIcon className="h-6 w-6 cursor-pointer"
-                                    onClick={logout}
-                    />
-                {/*</Link>*/}
+                <Link href="/account">
+                    <UserCircleIcon className="h-6 w-6 cursor-pointer"/>
+                </Link>
             </div>
         </header>
     );
