@@ -1,18 +1,18 @@
+import { getProducts, Product } from '@stripe/firestore-stripe-payments'
 import Head from 'next/head'
-import Header from "../components/Header";
-import Banner from "../components/Banner";
-import requests from "../utils/requests";
-import {Movie} from "../typings";
-import Row from "../components/Row";
-import useAuth from "../hooks/useAuth";
-import {modalState, movieState} from "../atoms/modalAtom";
-import Modal from "../components/Modal";
-import {useRecoilValue} from "recoil";
-import Plans from "../components/Plans";
-import {getProducts, Product} from "@stripe/firestore-stripe-payments";
-import payments from "../lib/stripe";
-import useSubscription from "../hooks/useSubscription";
-import useList from "../hooks/useList";
+import { useRecoilValue } from 'recoil'
+import { modalState, movieState } from '../atoms/modalAtom'
+import Banner from '../components/Banner'
+import Header from '../components/Header'
+import Modal from '../components/Modal'
+import Plans from '../components/Plans'
+import Row from '../components/Row'
+import useAuth from '../hooks/useAuth'
+import useList from '../hooks/useList'
+import useSubscription from '../hooks/useSubscription'
+import payments from '../lib/stripe'
+import { Movie } from '../typings'
+import requests from '../utils/requests'
 
 interface Props {
     netflixOriginals: Movie[]
@@ -28,48 +28,52 @@ interface Props {
 
 const Home = ({
                   netflixOriginals,
-                  trendingNow,
-                  topRated,
                   actionMovies,
                   comedyMovies,
+                  documentaries,
                   horrorMovies,
                   romanceMovies,
-                  documentaries,
-                  products
+                  topRated,
+                  trendingNow,
+                  products,
               }: Props) => {
-
-    const {loading, user} = useAuth()
+    const { loading, user } = useAuth()
     const showModal = useRecoilValue(modalState)
     const subscription = useSubscription(user)
     const movie = useRecoilValue(movieState)
-    const list  = useList(user?.uid)
+    const list = useList(user?.uid)
 
-    if (loading || subscription == null) return null
+    if (loading || subscription === null) return null
 
-    if (!subscription) return <Plans products={products}/>
+    if (!subscription) return <Plans products={products} />
 
     return (
-        <div className={`relative h-screen bg-gradient-to-b lg:h-[140vh] ${showModal && "!h-screen overflow-hidden"}`}>
+        <div
+            className={`relative h-screen bg-gradient-to-b lg:h-[140vh] ${
+                showModal && '!h-screen overflow-hidden'
+            }`}
+        >
             <Head>
-                <title>Netflix - Home</title>
-                <link rel="icon" href="/favicon.ico"/>
+                <title>Home - Netflix</title>
+                <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Header/>
+
+            <Header />
             <main className="relative pl-4 pb-24 lg:space-y-24 lg:pl-16">
-                <Banner netflixOriginals={netflixOriginals}/>
+                <Banner netflixOriginals={netflixOriginals} />
                 <section className="md:space-y-24">
-                    <Row title="Trending Now" movies={trendingNow}/>
-                    <Row title="Top Rated" movies={topRated}/>
-                    <Row title="Action Thrillers" movies={actionMovies}/>
-                    {/*My list*/}
+                    <Row title="Trending Now" movies={trendingNow} />
+                    <Row title="Top Rated" movies={topRated} />
+                    <Row title="Action Thrillers" movies={actionMovies} />
+                    {/* My List Component */}
                     {list.length > 0 && <Row title="My List" movies={list} />}
-                    <Row title="Comedies" movies={comedyMovies}/>
-                    <Row title="Scarry Movies" movies={horrorMovies}/>
-                    <Row title="Romance Movies" movies={romanceMovies}/>
-                    <Row title="Documentaries" movies={documentaries}/>
+                    <Row title="Comedies" movies={comedyMovies} />
+                    <Row title="Scary Movies" movies={horrorMovies} />
+                    <Row title="Romance Movies" movies={romanceMovies} />
+                    <Row title="Documentaries" movies={documentaries} />
                 </section>
             </main>
-            {showModal && <Modal/>}
+            {showModal && <Modal />}
         </div>
     )
 }
@@ -103,6 +107,7 @@ export const getServerSideProps = async () => {
         fetch(requests.fetchRomanceMovies).then((res) => res.json()),
         fetch(requests.fetchDocumentaries).then((res) => res.json()),
     ])
+
     return {
         props: {
             netflixOriginals: netflixOriginals.results,
@@ -114,6 +119,6 @@ export const getServerSideProps = async () => {
             romanceMovies: romanceMovies.results,
             documentaries: documentaries.results,
             products,
-        }
+        },
     }
 }
